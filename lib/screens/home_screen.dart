@@ -65,11 +65,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _navigateToAddReport,
-        icon: const Icon(Icons.add),
-        label: const Text('Report'),
-      ),
+      // Only show Report button when NOT on Profile page (index 3)
+      floatingActionButton: _currentIndex != 3
+          ? FloatingActionButton.extended(
+              onPressed: _navigateToAddReport,
+              icon: const Icon(Icons.add),
+              label: const Text('Report'),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

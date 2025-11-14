@@ -47,12 +47,17 @@ class ReportService extends ChangeNotifier {
       final snapshot = await _firestore
           .collection('reports')
           .where('userId', isEqualTo: userId)
-          .orderBy('createdAt', descending: true)
           .get();
 
-      return snapshot.docs
+      // Sort in memory instead of using orderBy (which requires an index)
+      final reports = snapshot.docs
           .map((doc) => Report.fromMap(doc.id, doc.data()))
           .toList();
+
+      // Sort by createdAt manually
+      reports.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+      return reports;
     } catch (e) {
       if (kDebugMode) {
         print('Error fetching user reports: $e');
@@ -95,10 +100,10 @@ class ReportService extends ChangeNotifier {
         await docRef.update({'photoUrls': imageUrls});
       }
 
-      // Update user's report count
-      await _firestore.collection('users').doc(report.userId).update({
+      // Update user's report count (use set with merge to create if doesn't exist)
+      await _firestore.collection('users').doc(report.userId).set({
         'reportsSubmitted': FieldValue.increment(1),
-      });
+      }, SetOptions(merge: true));
 
       // Refresh reports
       await fetchReports();
@@ -148,10 +153,10 @@ class ReportService extends ChangeNotifier {
     try {
       await _firestore.collection('reports').doc(reportId).delete();
 
-      // Update user's report count
-      await _firestore.collection('users').doc(userId).update({
+      // Update user's report count (use set with merge to handle if document doesn't exist)
+      await _firestore.collection('users').doc(userId).set({
         'reportsSubmitted': FieldValue.increment(-1),
-      });
+      }, SetOptions(merge: true));
 
       // Delete images from storage
       try {

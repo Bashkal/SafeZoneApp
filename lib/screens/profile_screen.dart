@@ -17,6 +17,16 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _isUploadingPhoto = false;
 
+  @override
+  void initState() {
+    super.initState();
+    // Refresh user data when profile screen is opened
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authService = Provider.of<AuthService>(context, listen: false);
+      authService.refreshUserData();
+    });
+  }
+
   Future<void> _updateProfilePhoto() async {
     try {
       final picker = ImagePicker();

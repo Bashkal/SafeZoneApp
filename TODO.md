@@ -286,16 +286,16 @@ reports/{reportId}
 ### 🔥 Firebase Configuration (15-20 minutes)
 
 #### Step 1: Create Firebase Project
-- [ ] Go to https://console.firebase.google.com/
-- [ ] Click "Add project"
-- [ ] Name it "SafeZone"
-- [ ] Follow wizard steps
+- [x] Go to https://console.firebase.google.com/
+- [x] Click "Add project"
+- [x] Name it "SafeZone"
+- [x] Follow wizard steps
 
 #### Step 2: Add Android App
-- [ ] Click "Add app" → Android icon
-- [ ] Package name: `com.example.safezone` (or your custom)
-- [ ] Download `google-services.json`
-- [ ] Place in: `android/app/google-services.json`
+- [x] Click "Add app" → Android icon
+- [x] Package name: `com.example.safezone` (or your custom)
+- [x] Download `google-services.json`
+- [x] Place in: `android/app/google-services.json`
 - [ ] Add Gradle dependencies (see README)
 
 #### Step 3: Add iOS App (if targeting iOS)
@@ -305,23 +305,23 @@ reports/{reportId}
 - [ ] Add to Xcode project: `ios/Runner/`
 
 #### Step 4: Enable Authentication
-- [ ] Go to Authentication → Sign-in method
-- [ ] Enable "Google" provider
-- [ ] Add support email
-- [ ] For Android: Add SHA-1 certificate fingerprint
+- [x] Go to Authentication → Sign-in method
+- [x] Enable "Google" provider
+- [x] Add support email
+- [x] For Android: Add SHA-1 certificate fingerprint
   ```bash
   # Get SHA-1 (Windows)
   cd android
   ./gradlew signingReport
   ```
-- [ ] Download updated `google-services.json` after adding SHA-1
+- [x] Download updated `google-services.json` after adding SHA-1
 
 #### Step 5: Create Firestore Database
-- [ ] Go to Firestore Database
-- [ ] Click "Create database"
-- [ ] Start in "Production mode"
-- [ ] Choose region (closest to users)
-- [ ] Update security rules:
+- [x] Go to Firestore Database
+- [x] Click "Create database"
+- [x] Start in "Production mode"
+- [x] Choose region (closest to users)
+- [x] Update security rules:
   ```javascript
   rules_version = '2';
   service cloud.firestore {

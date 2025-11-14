@@ -92,13 +92,14 @@ class AuthService extends ChangeNotifier {
     final docSnapshot = await userDoc.get();
 
     if (!docSnapshot.exists) {
-      // Create new user
+      // Create new user with reportsSubmitted initialized to 0
       final appUser = AppUser(
         uid: user.uid,
         email: user.email ?? '',
         displayName: user.displayName ?? 'Anonymous',
         photoUrl: user.photoURL,
         createdAt: DateTime.now(),
+        reportsSubmitted: 0,
       );
       await userDoc.set(appUser.toMap());
       _currentAppUser = appUser;
@@ -108,7 +109,8 @@ class AuthService extends ChangeNotifier {
         'displayName': user.displayName ?? 'Anonymous',
         'photoUrl': user.photoURL,
       });
-      _currentAppUser = AppUser.fromMap(docSnapshot.data()!);
+      // Reload user data to get the latest reportsSubmitted count
+      await _loadUserData(user.uid);
     }
   }
 
@@ -143,6 +145,14 @@ class AuthService extends ChangeNotifier {
         print('Error updating user photo: $e');
       }
       rethrow;
+    }
+  }
+
+  // Refresh user data (useful after submitting reports)
+  Future<void> refreshUserData() async {
+    if (currentUser != null) {
+      await _loadUserData(currentUser!.uid);
+      notifyListeners();
     }
   }
 }
